@@ -20,6 +20,7 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
+
 if(COMMAND configure_and_install)
     # header included already
     return()
@@ -36,6 +37,16 @@ macro(find_package _name)
         endif()
     endif()
 endmacro()
+
+
+# Fix an issue of not specifying C++17 in Visual Studio 2017
+function(target_compile_features _name)
+    _target_compile_features(${ARGV})
+
+    if(MSVC AND cxx_std_17 IN_LIST ARGN)
+        target_compile_options(${_name} ${ARGV1} /std:c++latest)
+    endif()
+endfunction()
 
 
 # Helper to use conan generated configuration if provided
@@ -75,9 +86,3 @@ function(configure_and_install _configure_in_file_path _version_compare_rules)
             DESTINATION ${ConfigPackageDestination}
             COMPONENT Devel)
 endfunction()
-
-
-# Fix an issue of not specifying C++17 in Visual Studio 2017
-if(CMAKE_CXX_STANDARD STREQUAL "17" AND MSVC)
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /std:c++latest")
-endif()
