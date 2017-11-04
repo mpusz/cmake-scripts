@@ -32,7 +32,7 @@ macro(find_package _name)
     _find_package(${ARGV})
     if("${_name}" STREQUAL "GTest")
         # fix an issue of GTest not buildng in Visual Studio 2017 with C++17
-        if(CMAKE_CXX_STANDARD STREQUAL "17" AND MSVC)
+        if(MSVC)
             add_definitions(-DGTEST_LANG_CXX11=1 -DGTEST_HAS_TR1_TUPLE=0)
         endif()
     endif()
