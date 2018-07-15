@@ -27,19 +27,6 @@ if(COMMAND configure_and_install)
 endif()
 
 
-# Provide typical configuration for specific packages
-macro(find_package _name)
-    _find_package(${ARGV})
-    if("${_name}" STREQUAL "GTest")
-        # fix an issue of GTest not buildng in Visual Studio 2017 with C++17
-        if(MSVC)
-            set_property(TARGET GTest::GTest APPEND PROPERTY COMPILE_DEFINITIONS GTEST_LANG_CXX11=1 GTEST_HAS_TR1_TUPLE=0)
-            set_property(TARGET GTest::GTest APPEND PROPERTY INTERFACE_COMPILE_DEFINITIONS GTEST_LANG_CXX11=1 GTEST_HAS_TR1_TUPLE=0)
-        endif()
-    endif()
-endmacro()
-
-
 # Fix an issue of not specifying C++17 in Visual Studio 2017
 function(target_compile_features _name)
     _target_compile_features(${ARGV})
