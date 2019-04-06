@@ -53,7 +53,7 @@ endmacro()
 
 
 # Generate configuration files and install the package
-function(configure_and_install _configure_in_file_path _version_compare_rules)
+function(configure_and_install _configure_in_file_path _namespace _version_compare_rules)
     # prepare installation files
     include(CMakePackageConfigHelpers)
     set(ConfigPackageSource ${CMAKE_CURRENT_BINARY_DIR}/${CMAKE_PROJECT_NAME})
@@ -69,7 +69,7 @@ function(configure_and_install _configure_in_file_path _version_compare_rules)
     install(EXPORT ${CMAKE_PROJECT_NAME}Targets
             DESTINATION ${ConfigPackageDestination}
             FILE ${CMAKE_PROJECT_NAME}-targets.cmake
-            NAMESPACE mp::
+            NAMESPACE ${_namespace}::
             COMPONENT Devel)
     install(FILES
             "${ConfigPackageSource}/${CMAKE_PROJECT_NAME}-config.cmake"
