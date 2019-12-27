@@ -21,47 +21,34 @@
 # SOFTWARE.
 
 
-if(COMMAND configure_and_install)
-    # header included already
-    return()
-endif()
+# A path to scripts directory
+set(CMAKE_SCRIPTS_ROOT ${CMAKE_CURRENT_SOURCE_DIR})
 
-
-# Fix an issue of not specifying C++17 in Visual Studio 2017
-function(target_compile_features _name)
-    _target_compile_features(${ARGV})
-
-    if(MSVC AND cxx_std_17 IN_LIST ARGN)
-        target_compile_options(${_name} ${ARGV1} /std:c++latest)
-    endif()
+# Install provided targets
+function(install_targets)
+    install(TARGETS ${ARGN}
+        EXPORT ${CMAKE_PROJECT_NAME}Targets
+        RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}  # TODO Remove when CMAKE 3.14
+        LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}  # TODO Remove when CMAKE 3.14
+        ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}  # TODO Remove when CMAKE 3.14
+        INCLUDES DESTINATION include
+    )
 endfunction()
 
-
-# Helper to use conan generated configuration if provided
-macro(conan_init generator)
-    if(${generator} STREQUAL "cmake_paths")
-        include(${CMAKE_BINARY_DIR}/conan_paths.cmake OPTIONAL)
-    elseif(${generator} STREQUAL "cmake")
-        if(EXISTS ${CMAKE_BINARY_DIR}/conanbuildinfo.cmake)
-            include(${CMAKE_BINARY_DIR}/conanbuildinfo.cmake)
-            conan_basic_setup(TARGETS)
-        endif()
-    else()
-        message(FATAL_ERROR "Unknown Conan generator: ${generator}")
-    endif()
-endmacro()
-
-
 # Generate configuration files and install the package
-function(configure_and_install _configure_in_file_path _namespace _version_compare_rules)
+function(configure_and_install configure_in_file_path namespace version_compare_rules)
+    if(NOT APPLE)
+        set(CMAKE_INSTALL_RPATH ${ORIGIN})
+    endif()
+
     # prepare installation files
     include(CMakePackageConfigHelpers)
     set(ConfigPackageSource ${CMAKE_CURRENT_BINARY_DIR}/${CMAKE_PROJECT_NAME})
     set(ConfigPackageDestination lib/cmake/${CMAKE_PROJECT_NAME})
     write_basic_package_version_file(
             ${ConfigPackageSource}/${CMAKE_PROJECT_NAME}-config-version.cmake
-            COMPATIBILITY ${_version_compare_rules})
-    configure_package_config_file(${_configure_in_file_path}
+            COMPATIBILITY ${version_compare_rules})
+    configure_package_config_file(${configure_in_file_path}
             ${ConfigPackageSource}/${CMAKE_PROJECT_NAME}-config.cmake
             INSTALL_DESTINATION ${ConfigPackageDestination})
 
@@ -69,7 +56,7 @@ function(configure_and_install _configure_in_file_path _namespace _version_compa
     install(EXPORT ${CMAKE_PROJECT_NAME}Targets
             DESTINATION ${ConfigPackageDestination}
             FILE ${CMAKE_PROJECT_NAME}-targets.cmake
-            NAMESPACE ${_namespace}::
+            NAMESPACE ${namespace}::
             COMPONENT Devel)
     install(FILES
             "${ConfigPackageSource}/${CMAKE_PROJECT_NAME}-config.cmake"
