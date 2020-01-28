@@ -21,7 +21,24 @@
 # SOFTWARE.
 
 
-include(conan)
-include(install)
-include(static_analysis)
-include(warnings)
+macro(enable_clang_tidy)
+    find_program(clang_tidy_cmd NAMES "clang-tidy")
+    if(NOT clang_tidy_cmd)
+        message(WARNING "clang-tidy not found!")
+    else()
+        if(NOT EXISTS "${CMAKE_SOURCE_DIR}/.clang-tidy")
+            message(FATAL_ERROR "'${CMAKE_SOURCE_DIR}/.clang-tidy' configuration file not found!")
+        endif()
+        set(CMAKE_CXX_CLANG_TIDY "${clang_tidy_cmd}")
+    endif()
+endmacro()
+
+
+macro(enable_iwyu)
+    find_program(iwyu_cmd NAMES "iwyu")
+    if(NOT iwyu_cmd)
+        message(WARNING "iwyu (Include What You Use) not found!")
+    else()
+        set(CMAKE_CXX_INCLUDE_WHAT_YOU_USE "${iwyu_cmd}")
+    endif()
+endmacro()

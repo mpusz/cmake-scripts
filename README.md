@@ -7,6 +7,7 @@ Common CMake tools and wrappers to use in other repositories.
 A wrapper file including all other CMake modules:
 - `conan.cmake`
 - `install.cmake`
+- `static_analysis.cmake`
 - `warnings.cmake`
 
 ## `conan.cmake`
@@ -21,6 +22,11 @@ A wrapper file including all other CMake modules:
 - `configure_and_install(configure_in_file_path, namespace, version_compare_rules)` - creates CMake package
      version and config files based on a provided template, and installs them together with
      `${CMAKE_PROJECT_NAME}Targets` ``EXPORT` target.
+
+## `static_analysis.cmake`
+
+- `enable_clang_tidy()` - enable clang-tidy analysis
+- `enable_iwyu()` - enable Include What You Use
 
 ## `warnings.cmake`
 
