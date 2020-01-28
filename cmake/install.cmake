@@ -22,16 +22,26 @@
 
 
 # A path to scripts directory
-set(CMAKE_SCRIPTS_ROOT ${CMAKE_CURRENT_SOURCE_DIR})
+set(CMAKE_SCRIPTS_ROOT ${CMAKE_CURRENT_LIST_DIR})
 
 # Install provided targets
 function(install_targets)
+    if(NOT CMAKE_INSTALL_BINDIR)
+        set(CMAKE_INSTALL_BINDIR "bin")
+    endif()
+    if(NOT CMAKE_INSTALL_LIBDIR)
+        set(CMAKE_INSTALL_LIBDIR "lib")
+    endif()
+    if(NOT CMAKE_INSTALL_INCLUDEDIR)
+        set(CMAKE_INSTALL_INCLUDEDIR "include")
+    endif()
     install(TARGETS ${ARGN}
         EXPORT ${CMAKE_PROJECT_NAME}Targets
         RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}  # TODO Remove when CMAKE 3.14
         LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}  # TODO Remove when CMAKE 3.14
         ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}  # TODO Remove when CMAKE 3.14
-        INCLUDES DESTINATION include
+        PUBLIC_HEADER DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
+        INCLUDES DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
     )
 endfunction()
 

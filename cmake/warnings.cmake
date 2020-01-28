@@ -22,7 +22,15 @@
 
 
 # Configure compiler warning level
-macro(set_warnings treat_warnings_as_errors)
+macro(set_warnings)
+    if(${ARGC} GREATER_EQUAL 1)
+        if(${ARGV0} STREQUAL "TREAT_AS_ERRORS")
+            set(treat_warnings_as_errors, TRUE)
+        else()
+            message(FATAL_ERROR "Unknown argument '${ARGV0}' passed to set_warnings()")
+        endif()    
+    endif()
+
     if(MSVC)
         # set warnings
         if(CMAKE_CXX_FLAGS MATCHES "/W[0-4]")
@@ -33,16 +41,17 @@ macro(set_warnings treat_warnings_as_errors)
         set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /w44062 /w44263 /w44266 /w44640")
 
         # disable language extensions
-        set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /Za")
+        set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /Za /permissive-")
 
         if(treat_warnings_as_errors)
             set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /WX")
         endif()
     elseif(CMAKE_COMPILER_IS_GNUCC OR CMAKE_COMPILER_IS_GNUCXX)
         # set warnings
-        set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wextra -Wformat=2 -pedantic")
+        set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wextra -Wformat=2 -Wpedantic")
         set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wshadow -Wunused -Wnon-virtual-dtor -Woverloaded-virtual")
         set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wold-style-cast -Wcast-qual -Wcast-align")
+        set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wconversion -Wsign-conversion")
 
         include(CheckCXXCompilerFlag)
         

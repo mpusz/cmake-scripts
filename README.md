@@ -12,6 +12,7 @@ A wrapper file including all other CMake modules:
 ## `conan.cmake`
 
 - `conan_init(generator)` - initializes CMake with data from Conan Package Manger (if present)
+- `conan_check_testing(test_framework)` - checks if Conan installed testing dependencies
 
 ## `install.cmake`
 
@@ -23,7 +24,7 @@ A wrapper file including all other CMake modules:
 
 ## `warnings.cmake`
 
-- `set_warnings(treat_warnings_as_errors)` - very restrictive compilation warning flags settings for
+- `set_warnings([TREAT_AS_ERRORS])` - very restrictive compilation warning flags settings for
      Continuous Integration and local builds. It should not be used in the library project `CMakeLists.txt`
      file to not force other users using this library to compile their projects with our flags or even worse
      to modify their preset flags by our scripts.
