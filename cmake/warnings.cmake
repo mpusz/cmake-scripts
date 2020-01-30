@@ -28,7 +28,7 @@ macro(set_warnings)
             set(treat_warnings_as_errors TRUE)
         else()
             message(FATAL_ERROR "Unknown argument '${ARGV0}' passed to set_warnings()")
-        endif()    
+        endif()
     endif()
 
     if(MSVC)
