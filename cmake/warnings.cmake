@@ -25,7 +25,7 @@
 macro(set_warnings)
     if(${ARGC} GREATER_EQUAL 1)
         if(${ARGV0} STREQUAL "TREAT_AS_ERRORS")
-            set(treat_warnings_as_errors, TRUE)
+            set(treat_warnings_as_errors TRUE)
         else()
             message(FATAL_ERROR "Unknown argument '${ARGV0}' passed to set_warnings()")
         endif()    
