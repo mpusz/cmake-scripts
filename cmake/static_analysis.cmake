@@ -35,9 +35,9 @@ endmacro()
 
 
 macro(enable_iwyu)
-    find_program(iwyu_cmd NAMES "iwyu")
+    find_program(iwyu_cmd NAMES "include-what-you-use")
     if(NOT iwyu_cmd)
-        message(WARNING "iwyu (Include What You Use) not found!")
+        message(WARNING "include-what-you-use not found!")
     else()
         set(CMAKE_CXX_INCLUDE_WHAT_YOU_USE "${iwyu_cmd}")
     endif()
