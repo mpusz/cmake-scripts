@@ -39,6 +39,6 @@ endmacro()
 # Checks if conan installed testing dependencies
 macro(conan_check_testing test_framework)
     if(NOT TARGET CONAN_PKG::${test_framework})
-        message(FATAL_ERROR "CONAN_PKG::${test_framework} not found!\nPlease run conan with `-e CONAN_RUN_TESTS=True`.")
+        message(FATAL_ERROR "CONAN_PKG::${test_framework} not found!\nPlease run `conan install` with `-e CONAN_RUN_TESTS=True`.")
     endif()
 endmacro()
