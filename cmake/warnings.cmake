@@ -49,7 +49,11 @@ macro(set_warnings)
     elseif(CMAKE_COMPILER_IS_GNUCC OR CMAKE_COMPILER_IS_GNUCXX)
         # set warnings
         set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wextra -Wformat=2 -Wpedantic")
-        set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wshadow -Wunused -Wnon-virtual-dtor -Woverloaded-virtual")
+        if(CMAKE_CXX_COMPILER_VERSION VERSION_GREATER_EQUAL 5.0)
+            # gcc-4.9 had a bug that reported shadowing between local variable and class a member function name
+            set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wshadow")
+        endif()
+        set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wunused -Wnon-virtual-dtor -Woverloaded-virtual")
         set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wold-style-cast -Wcast-qual -Wcast-align")
         set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wsign-conversion")
 
