@@ -36,7 +36,7 @@ function(install_targets)
         set(CMAKE_INSTALL_INCLUDEDIR "include")
     endif()
     install(TARGETS ${ARGN}
-        EXPORT ${CMAKE_PROJECT_NAME}Targets
+        EXPORT ${PROJECT_NAME}Targets
         RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}  # TODO Remove when CMAKE 3.14
         LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}  # TODO Remove when CMAKE 3.14
         ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}  # TODO Remove when CMAKE 3.14
@@ -53,24 +53,24 @@ function(configure_and_install configure_in_file_path namespace version_compare_
 
     # prepare installation files
     include(CMakePackageConfigHelpers)
-    set(ConfigPackageSource ${CMAKE_CURRENT_BINARY_DIR}/${CMAKE_PROJECT_NAME})
-    set(ConfigPackageDestination lib/cmake/${CMAKE_PROJECT_NAME})
+    set(ConfigPackageSource ${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME})
+    set(ConfigPackageDestination lib/cmake/${PROJECT_NAME})
     write_basic_package_version_file(
-            ${ConfigPackageSource}/${CMAKE_PROJECT_NAME}-config-version.cmake
+            ${ConfigPackageSource}/${PROJECT_NAME}-config-version.cmake
             COMPATIBILITY ${version_compare_rules})
     configure_package_config_file(${configure_in_file_path}
-            ${ConfigPackageSource}/${CMAKE_PROJECT_NAME}-config.cmake
+            ${ConfigPackageSource}/${PROJECT_NAME}-config.cmake
             INSTALL_DESTINATION ${ConfigPackageDestination})
 
     # install library
-    install(EXPORT ${CMAKE_PROJECT_NAME}Targets
+    install(EXPORT ${PROJECT_NAME}Targets
             DESTINATION ${ConfigPackageDestination}
-            FILE ${CMAKE_PROJECT_NAME}-targets.cmake
+            FILE ${PROJECT_NAME}-targets.cmake
             NAMESPACE ${namespace}::
             COMPONENT Devel)
     install(FILES
-            "${ConfigPackageSource}/${CMAKE_PROJECT_NAME}-config.cmake"
-            "${ConfigPackageSource}/${CMAKE_PROJECT_NAME}-config-version.cmake"
+            "${ConfigPackageSource}/${PROJECT_NAME}-config.cmake"
+            "${ConfigPackageSource}/${PROJECT_NAME}-config-version.cmake"
             DESTINATION ${ConfigPackageDestination}
             COMPONENT Devel)
 endfunction()
