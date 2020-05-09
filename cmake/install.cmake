@@ -73,4 +73,9 @@ function(configure_and_install configure_in_file_path namespace version_compare_
             "${ConfigPackageSource}/${PROJECT_NAME}-config-version.cmake"
             DESTINATION ${ConfigPackageDestination}
             COMPONENT Devel)
+
+    # local package
+    export(EXPORT ${PROJECT_NAME}Targets
+           NAMESPACE ${namespace}::
+           FILE ${ConfigPackageSource}/${PROJECT_NAME}-targets.cmake)
 endfunction()
