@@ -97,6 +97,8 @@ function(set_warnings target)
     )
 
     if(MSVC)
+        string(REGEX REPLACE "/W[0-4]" "" CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}")
+        set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}" PARENT_SCOPE)
         target_compile_options(${target} INTERFACE ${MSVC_WARNINGS})
     elseif(CMAKE_CXX_COMPILER_ID MATCHES ".*Clang")
         target_compile_options(${target} INTERFACE ${CLANG_WARNINGS})
